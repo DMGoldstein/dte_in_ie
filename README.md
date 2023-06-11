@@ -5,4 +5,4 @@ This repository contains the scripts and code for the paper "Divergence-estimati
 The folder `modules` contains the code for the various components of the model (i.e., tree model, clock model, character-change model).
 
 The organization of the directories follows the workflow laid out by Mike May in 
-[this tutorial]([https://duckduckgo.com](https://revbayes.github.io/tutorials/ted_workflow/)).
+[this tutorial](https://duckduckgo.com](https://revbayes.github.io/tutorials/ted_workflow/).
