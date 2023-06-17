@@ -14,3 +14,7 @@ To run the analyses, set the `path` argument in the file `path.Rev` to the locat
 
 The organization of the directories follows the workflow laid out by Mike May in 
 [this tutorial](https://revbayes.github.io/tutorials/ted_workflow/).
+
+The analyses in the paper were conducted with [RevBayes 1.1.1](https://github.com/revbayes/revbayes/releases/tag/1.1.1).
+
+
