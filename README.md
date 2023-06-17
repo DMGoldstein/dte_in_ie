@@ -8,7 +8,7 @@ The `data` folder contains the following three files:
 2. `romance_broad_variable_taxa_fbd.tsv`
 3. `romance_broad_variable_taxa_fbdr_ancient.tsv`
 
-The first contains the character matrix used in all of the analyses. The second and third contain the occurrence times and stratigraphic ranges, respectively. 
+The first contains the character matrix used in all of the analyses. The second and third contain the occurrence times and stratigraphic ranges for Latin. 
 
 To run the analyses, set the `path` argument in the file `path.Rev` to the location of the folder on your local machine (there is a unique version of this file in each of the `mcmc`, `lnl`, and `pps` folders). Open `RevBayes` and input `source("file_name.Rev")`, with `file_name.Rev` being the name of one of the header files in folders mentioned above. For instance, to run the MCMC analysis of the FBD F81 UCE model, issue the command `source("romance_broad_variable_dns_fbd_f81_uce_stem.Rev")`.
 
