@@ -10,7 +10,9 @@ The `data` folder contains the following three files:
 
 The first contains the character matrix used in all of the analyses. The second and third contain the occurrence times and stratigraphic ranges for Latin. 
 
-To run the analyses, set the `path` argument in the file `path.Rev` to the location of the folder on your local machine (there is a unique version of this file in each of the `mcmc`, `lnl`, and `pps` folders). Open `RevBayes` and input `source("file_name.Rev")`, with `file_name.Rev` being the name of one of the header files in folders mentioned above. For instance, to run the MCMC analysis of the FBD F81 UCE model, issue the command `source("romance_broad_variable_dns_fbd_f81_uce_stem.Rev")`.
+To run the analyses, set the `path` argument in the file `path.Rev` to the location of the folder `scripts_and_data` on your local machine. There is a unique version of this file in each of the `mcmc`, `lnl`, and `pps` folders. In each case it is located in the `/romance/broad_variable` folder. 
+
+Once you have specified the path, open `RevBayes` and input `source("file_name.Rev")`, with `file_name.Rev` being the name of one of the header files in folders mentioned above. For instance, to run the MCMC analysis of the FBD F81 UCE model, issue the command `source("romance_broad_variable_dns_fbd_f81_uce_stem.Rev")`.
 
 The organization of the directories follows the workflow laid out by Mike May in 
 [this tutorial](https://revbayes.github.io/tutorials/ted_workflow/).
