@@ -1,0 +1,8 @@
+fsp ~ dnExponential(5.0)
+
+# Specify a scale move on the psi parameter #
+moves.append( mvScale(fsp, lambda=1.0,  weight=5.0) )
+moves.append( mvScale(fsp, lambda=2.0,  weight=5.0) )
+moves.append( mvScale(fsp, lambda=3.0,  weight=5.0) )
+
+psi := abs( -fsp * death_rate / (fsp - 1.0) )

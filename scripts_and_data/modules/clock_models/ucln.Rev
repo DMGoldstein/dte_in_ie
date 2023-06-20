@@ -1,0 +1,18 @@
+
+ucln_mean ~ dnExponential(2.0)
+ucln_sigma ~ dnExponential(3.0)
+
+ucln_var := ucln_sigma * ucln_sigma
+ucln_mu := ln(ucln_mean) - (ucln_var * 0.5)
+
+moves.append(mvScale(ucln_mean, lambda=1.0, tune=true, weight=4.0))
+moves.append(mvScale(ucln_sigma, lambda=1.0, tune=true, weight=4.0))
+
+for(i in 1:n_branches){
+    branch_rates[i] ~ dnLnorm(ucln_mu, ucln_sigma)
+    moves.append(mvScale(branch_rates[i],lambda=1.0,tune=true,weight=40.0))
+}
+moves.append(mvVectorScale(branch_rates,lambda=1.0,tune=true,weight=50.0))
+moves.append(mvVectorSingleElementScale(branch_rates,lambda=50.0,tune=true,weight=50.0))
+
+mean_rt := mean(branch_rates) 

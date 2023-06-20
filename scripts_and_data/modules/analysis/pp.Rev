@@ -1,0 +1,24 @@
+mymodel = model(timetree)
+
+
+monitors.append( mnModel(filename="output/" + filename + "/" + filename + ".log", printgen=print_gen, separator = TAB) )
+monitors.append( mnScreen(printgen = print_gen) )
+
+
+pow_p = powerPosterior(mymodel, monitors, moves, filename = "output/" + filename + "/" + filename + "/stones/pp.log", cats = n_stones - 1, sampleFreq = print_gen)
+
+pow_p.burnin(generations=burn_in,tuningInterval=100)
+pow_p.run(generations = n_gen)
+
+# stepping-stone estimate of the marginal likelihood
+ss = steppingStoneSampler(file = "output/" + filename + "/" + filename + "/stones/pp.log", powerColumnName = "power", likelihoodColumnName = "likelihood")
+ss_ml = ss.marginal()
+"Stepping-stone sampling estimate of ML: " + ss_ml
+
+# path-sampling estimate of the marginal likelihood
+ps = pathSampler(file = filename = "output/" + filename + "/" + filename + "/stones/pp.log", powerColumnName = "power", likelihoodColumnName = "likelihood")
+ps_ml = ps.marginal()
+"Path-sampling estimate of ML: " + ps_ml
+
+# write estimates to file
+write(ps_ml, ss_ml, filename = "output/" + filename + "/" + filename + "/ml.txt")

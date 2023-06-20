@@ -1,0 +1,35 @@
+mymodel = model(timetree)
+
+monitors.append( mnScreen(printgen=print_gen, age_romance, n_samp_anc) )
+monitors.append( mnModel(filename="output/" + filename + "/" + filename + ".log", printgen=print_gen) )
+monitors.append( mnFile(filename="output/" + filename + "/" + filename + ".trees", printgen=print_gen, timetree) )
+monitors.append( mnStochasticVariable(filename = "output/" + filename + "/" + filename + ".stoch.var", printgen = print_gen) )
+
+
+mymcmc = mcmc(mymodel, monitors, moves, nruns=1)
+
+if (restart == false) {
+    if (burn_in > 0) {
+        mymcmc.burnin(generations=burn_in,tuningInterval=100)
+        mymcmc.operatorSummary()
+        mymcmc.run(generations=n_gen, checkpointInterval=print_gen, checkpointFile="output/" + filename + "/" + filename + ".state")
+        mymcmc.operatorSummary()
+    } else if (burn_in == 0) {
+        mymcmc.run(generations=n_gen, checkpointInterval=print_gen, checkpointFile="output/" + filename + "/" + filename + ".state")
+        mymcmc.operatorSummary()
+    }
+} else if (restart == true) {
+    mymcmc.initializeFromCheckpoint("output/" + filename + ".state")
+    mymcmc.run(generations=n_gen, checkpointInterval=print_gen, checkpointFile="output/" + filename + ".state")
+    mymcmc.operatorSummary() 
+}
+
+# read in posterior samples
+trace = readStochasticVariableTrace("output/" + filename + "/" + filename + ".stoch.var", delimiter=TAB)
+
+pps = posteriorPredictiveSimulation(mymodel, directory = "output/" + filename + "/" + "simulations/", trace)
+
+# run 
+pps.run()
+
+

@@ -1,0 +1,51 @@
+
+if (starting_time == "stem") {
+
+timetree ~ dnFBDP(originAge = start_time, 
+                  lambda    = birth_rate, 
+                  mu        = death_rate, 
+                  rho       = rho,
+                  psi       = psi, 
+                  timeline  = breakpoints,
+                  condition = "time",
+                  taxa      = taxa)
+
+} else if (starting_time == "root") {
+
+timetree ~ dnFBDP(rootAge   = start_time, 
+                  lambda    = birth_rate, 
+                  mu        = death_rate, 
+                  rho       = rho,
+                  psi       = psi, 
+                  timeline  = breakpoints,
+                  condition = "time",
+                  taxa      = taxa)
+}
+
+
+# moves on the tree and node times 
+# update the tree topology 
+moves.append( mvFNPR(timetree, weight=60.0) )
+moves.append( mvCollapseExpandFossilBranch(timetree, start_time, weight=50.0) )
+
+# update the node ages 
+
+moves.append( mvNodeTimeSlideUniform(timetree, weight=50.0) )
+moves.append( mvRootTimeSlideUniform(timetree, start_time, weight=50.0) )
+
+fossils = timetree.getFossils()
+
+for(i in 1:fossils.size())
+{
+    t[i] := tmrca(timetree, clade(fossils[i]))
+
+    a_i = fossils[i].getMinAge()
+    b_i = fossils[i].getMaxAge()
+
+    F[i] ~ dnUniform(t[i] - b_i, t[i] - a_i)
+    F[i].clamp( 0 )
+}
+
+# sample fossil times 
+moves.append( mvFossilTimeSlideUniform(timetree, start_time, weight=50.0) )
+

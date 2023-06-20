@@ -1,0 +1,2 @@
+clock_rate ~ dnGamma(2.0,4.0)
+moves.append( mvScale(clock_rate,lambda=0.5,tune=true,weight=5.0) )

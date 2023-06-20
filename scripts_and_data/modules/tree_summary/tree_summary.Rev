@@ -1,0 +1,9 @@
+trace = readTreeTrace("output/" + filename + "/" + filename + ".trees")
+
+map_tree = mapTree(trace, file="output/" + filename + "/" + filename + "_map" + ".tree" )
+
+mcc_tree = mccTree(trace, file="output/" + filename + "/" + filename + "_mcc" + ".tree" )
+
+consensus_tree = consensusTree(trace, cutoff = 0.5, file="output/" + filename + "/" + filename + "_consensus" + ".tree" )
+
+

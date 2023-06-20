@@ -1,0 +1,35 @@
+if (starting_time == "stem") {
+
+timetree ~ dnFBDRP(originAge  = start_time,
+                   lambda     = birth_rate, 
+                   mu         = death_rate, 
+                   psi        = psi, 
+                   rho        = rho, 
+                   timeline   = breakpoints,
+                   condition  = "time", 
+                   taxa       = taxa)
+
+} else if (starting_time == "root") {
+
+timetree ~ dnFBDRP(rootAge    = start_time,
+                   lambda     = birth_rate, 
+                   mu         = death_rate, 
+                   psi        = psi, 
+                   rho        = rho, 
+                   timeline   = breakpoints,
+                   condition  = "time", 
+                   taxa       = taxa)
+
+}
+
+
+
+# moves on the tree and node times 
+# update the tree topology 
+moves.append( mvFNPR(timetree, weight=60.0) )
+moves.append( mvCollapseExpandFossilBranch(timetree, start_time, weight=50.0) )
+
+# update the node ages 
+
+moves.append( mvNodeTimeSlideUniform(timetree, weight=50.0) )
+moves.append( mvRootTimeSlideUniform(timetree, start_time, weight=50.0) )

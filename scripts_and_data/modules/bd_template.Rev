@@ -1,0 +1,29 @@
+# convenient constants
+H = ln(10) / (qnorm(0.975) - qnorm(0.025))
+
+# interestingly, the efbdr script worked even with the romance epochs
+
+timescale = readDataDelimitedFile(path + "data/epoch_timescale_" + study_group + ".csv", header = true, delimiter=",")
+n_bins  = timescale.size()
+
+for(i in 1:n_bins) {
+    breakpoints[i] <- timescale[i][2]
+}
+
+
+source(path + "scripts/modules/diversification_models/" + time_shift + "_" + parameterization + ".Rev")
+
+source(path + "scripts/modules/fossilization_models/" + time_shift + "_" + parameterization + ".Rev")
+
+if (study_group == "romance" && clade_constraints == false) {
+    source(path + "scripts/modules/bd_models/cc_romance.Rev")
+    source(path + "scripts/modules/bd_models/" + bd_model + "_" + time_shift + ".Rev")
+} else if (study_group == "romance" && clade_constraints == true) {
+    source(path + "scripts/modules/bd_models/cc_romance.Rev")
+    topology = v(continental)
+    source(path + "scripts/modules/bd_models/" + bd_model + "_" + time_shift + "_cc" + ".Rev")
+} 
+
+age_romance := tmrca(timetree, romance)
+
+n_samp_anc := timetree.numSampledAncestors()

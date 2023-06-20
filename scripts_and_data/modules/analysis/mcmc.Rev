@@ -1,0 +1,32 @@
+mymodel = model(timetree)
+
+monitors.append( mnModel(filename="output/" + filename + "/" + filename + ".log", printgen=print_gen) )
+monitors.append( mnFile(filename="output/" + filename + "/" + filename + ".trees", printgen=print_gen, timetree) )
+
+
+monitors.append( mnScreen(printgen=print_gen, age_romance, n_samp_anc) )
+
+
+if (time_shift == "epochal") {
+    monitors.append( mnFile(filename="output/" + filename + "/" + filename + "_" + "speciations.log",printgen=print_gen, separator = TAB, birth_rate) )
+    monitors.append( mnFile(filename="output/" + filename + "/" + filename + "_" + "speciation_times.log",printgen=print_gen, separator = TAB, breakpoints) )
+    monitors.append( mnFile(filename="output/" + filename + "/" + filename + "_" + "extinctions.log",printgen=print_gen, separator = TAB, death_rate) )
+    monitors.append( mnFile(filename="output/" + filename + "/" + filename + "_" + "extinction_times.log",printgen=print_gen, separator = TAB, breakpoints) )
+}
+
+mymcmc = mcmc(mymodel, monitors, moves, nruns=n_runs, combine="mixed")
+
+if (restart == false) {
+    if (burn_in > 0) { 
+        mymcmc.burnin(generations=burn_in,tuningInterval=100)
+        mymcmc.operatorSummary()
+        mymcmc.run(generations=n_gen, checkpointInterval=print_gen, checkpointFile="output/" + filename + "/" + filename +  ".state", underPrior = under_prior)
+    } else if (burn_in == 0) {
+        mymcmc.run(generations=n_gen, checkpointInterval=print_gen, checkpointFile="output/" + filename + "/" + filename +  ".state", underPrior = under_prior)
+    }
+} else if (restart == true) {
+    mymcmc.initializeFromCheckpoint("output/" + filename + "/" + filename + ".state")
+    mymcmc.run(generations=n_gen, checkpointInterval=print_gen, checkpointFile="output/" + filename + "/" + filename + ".state", underPrior = under_prior) 
+}
+
+mymcmc.operatorSummary()

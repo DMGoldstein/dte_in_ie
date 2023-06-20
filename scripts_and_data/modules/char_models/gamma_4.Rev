@@ -1,0 +1,4 @@
+alpha ~ dnLognormal(ln(5.0), 0.587405)
+moves.append( mvScale(alpha, lambda=2.0, tune=true, weight=1.0) )
+
+asrv_gamma := fnDiscretizeGamma( alpha, alpha, 4 )

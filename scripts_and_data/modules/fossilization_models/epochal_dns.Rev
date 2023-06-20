@@ -1,0 +1,26 @@
+# specify the mixture model
+n_fsp_cats = 3
+
+# draw the rates for each category
+for(i in 1:n_fsp_cats) {
+  fsp_rate_cat[i] ~ dnExponential(10.0)
+  moves.append( mvScale(fsp_rate_cat[i], lambda=1.0,  weight=5.0) )
+  moves.append( mvScale(fsp_rate_cat[i], lambda=2.0,  weight=5.0) )
+  moves.append( mvScale(fsp_rate_cat[i], lambda=3.0,  weight=5.0) )
+}
+
+# mixture weights for each category
+fsp_mixture_weights ~ dnDirichlet(rep(1, n_fsp_cats))
+moves.append( mvBetaSimplex(fsp_mixture_weights, weight = 1.0) )
+moves.append( mvElementSwapSimplex(fsp_mixture_weights, weight = 1.0) )
+
+# rates for each epoch
+for(i in 1:(breakpoints.size() + 1)) {
+	# diversification rate
+  fsp[i] ~ dnMixture(fsp_rate_cat, fsp_mixture_weights)
+  moves.append( mvMixtureAllocation(fsp[i], weight = 1.0) )
+}
+
+for(i in 1:(breakpoints.size() + 1)) {
+  psi[i] := abs( -fsp[i] * death_rate[i] / (fsp[i] - 1.0) )
+}

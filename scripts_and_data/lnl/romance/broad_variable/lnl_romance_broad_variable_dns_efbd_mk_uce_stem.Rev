@@ -1,0 +1,79 @@
+############
+# Metadata #
+############
+
+study_group       = "romance"
+dataset           = "broad_variable"
+parameterization  = "dns"
+bd_model          = "fbd"
+char_model        = "mk"
+clock_model       = "uce"
+clade_constraints = false
+acrv              = "gamma_4"
+time_shift        = "epochal"
+starting_time     = "stem"
+under_prior       = false
+
+#####################
+# Analysis settings #
+#####################
+
+analysis  = "cluster"
+n_stones  = 128
+print_gen = 10
+burn_in   = 1e3
+n_gen     = 1e4
+
+#######################
+# Reading in the Data #
+#######################
+
+source("path.Rev")
+
+source(path + "scripts/modules/preamble.Rev")
+
+##############
+# Origin age #
+##############
+
+source(path + "scripts/modules/clock_models/" + starting_time + ".Rev")
+
+##############
+## BD model ##
+##############
+
+source(path + "scripts/modules/bd_template.Rev")
+
+###########################################
+# Binary morphological substitution model #
+###########################################
+
+source(path + "scripts/modules/char_models/" + char_model + ".Rev")
+
+##################################
+# Among-Character Rate Variation #
+##################################
+
+source(path + "scripts/modules/char_models/" + acrv + ".Rev")
+
+######################################
+############ Clock model #############
+######################################
+
+source(path + "scripts/modules/clock_models/" + clock_model + ".Rev")
+
+###################
+# PhyloCTMC Model #
+###################
+
+seq ~ dnPhyloCTMC(tree=timetree, branchRates=branch_rates, Q=Q, siteRates=asrv_gamma, type="Standard", coding="variable") 
+seq.clamp(data)
+
+###################
+# Power Posterior #
+###################
+	
+source(path + "scripts/modules/analysis/pp.Rev")
+
+
+

@@ -1,0 +1,70 @@
+###########################################################
+### Load fossil occurrence times / Stratigraphic ranges ###
+###########################################################
+
+if (bd_model == "fbdr") {
+   taxa <- readTaxonData(path + "data/" + study_group + "_" + dataset + "_taxa_fbdr_" + strat_range + ".tsv")
+} else if (bd_model == "fbd") {
+	taxa <- readTaxonData(path + "data/" + study_group + "_" + dataset + "_taxa_fbd.tsv")
+}
+
+#############################
+### Load character matrix ###
+#############################
+
+data <- readDiscreteCharacterData(path + "data/chang_" + study_group + "_" + dataset + ".nex")
+
+#################################
+### Character matrix metadata ###
+#################################
+
+n_taxa <- data.size()
+n_sites <- data.nchar()
+n_branches <- 2 * n_taxa - 2
+
+
+n_fossils = 0
+   for(i in 1:taxa.size()) {
+   if (taxa[i].getMinAge() != 0) {
+   n_fossils = n_fossils + 1
+      }
+}
+
+
+#######################
+### Extant sampling ###
+#######################
+
+
+#number of extant Romance languages in broad dataset
+extant_romance <- 14.0         
+
+#glottolog 4.6 78 minus mozarabic and dalmation
+total_extant_romance <- 76.0   
+
+rho <- extant_romance / total_extant_romance
+total_extant_taxa <- total_extant_romance
+
+###############################################
+### Helper variables for moves and monitors ###
+###############################################
+
+moves    = VectorMoves()
+monitors = VectorMonitors()
+
+if (bd_model == "fbdr") {
+
+   filename = study_group + "_" + dataset + "_" + parameterization + "_" + bd_model + "_" + strat_range + "_" + time_shift + "_" + char_model + "_" + clock_model + "_" + starting_time
+   
+} else if (bd_model == "fbd") {
+
+   filename = study_group + "_" + dataset + "_" + parameterization + "_" + bd_model + "_" + time_shift + "_" + char_model + "_" + clock_model + "_" + starting_time
+}
+
+if (clade_constraints == true) {
+   filename = filename + "_cc"
+}
+
+if (under_prior == true) {
+   filename = filename + "_prior"
+}

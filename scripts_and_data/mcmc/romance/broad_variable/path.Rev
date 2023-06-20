@@ -1,0 +1,5 @@
+if (analysis == "local") {
+    path = ""
+} else if (analysis == "cluster") {
+    path = ""
+}

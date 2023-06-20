@@ -1,0 +1,18 @@
+
+#empirical bayes prior
+diversification_mean <- ln(total_extant_taxa / 1) / start_time
+
+diversification ~ dnLognormal(ln(diversification_mean), 0.5) 
+
+moves.append(mvScale(diversification,lambda=1.5,tune=true,weight=1.0))
+
+turnover ~ dnBeta(2.0, 2.0) 
+
+moves.append(mvSlide(turnover,delta=1.0,tune=true,weight=1.0))
+
+
+denom := abs(1.0 - turnover) 
+
+birth_rate := diversification / denom
+
+death_rate := (turnover * diversification) / denom

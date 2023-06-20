@@ -1,0 +1,92 @@
+############
+# Metadata #
+############
+
+study_group       = "romance"
+dataset           = "broad_variable"
+parameterization  = "dns"
+bd_model          = "fbdr"
+strat_range       = "ancient"
+char_model        = "f81"
+clock_model       = "strict_gamma"
+clade_constraints = false
+acrv              = "gamma_4"
+time_shift        = "constant"
+starting_time     = "stem"
+under_prior       = false
+
+
+#####################
+# Analysis settings #
+#####################
+
+analysis  = "local"
+burn_in   = 1e3
+n_runs    = 6
+print_gen = 5
+n_gen     = 5e5
+restart   = false
+
+#######################
+# Reading in the Data #
+#######################
+
+source("path.Rev")
+
+source(path + "scripts/modules/preamble.Rev")
+
+##############
+# Origin age #
+##############
+
+source(path + "scripts/modules/clock_models/" + starting_time + ".Rev")
+
+##############
+## BD model ##
+##############
+
+source(path + "scripts/modules/bd_template.Rev")
+
+###########################################
+# Binary morphological substitution model #
+###########################################
+
+source(path + "scripts/modules/char_models/" + char_model + ".Rev")
+
+
+##################################
+# Among-Character Rate Variation #
+##################################
+
+source(path + "scripts/modules/char_models/" + acrv + ".Rev")
+
+######################################
+############ Clock model #############
+######################################
+
+source(path + "scripts/modules/clock_models/" + clock_model + ".Rev")
+
+###################
+# PhyloCTMC Model #
+###################
+
+seq ~ dnPhyloCTMC(tree=timetree, 
+                  branchRates=clock_rate, 
+                  Q=Q, 
+                  siteRates=asrv_gamma, 
+                  type="Standard", 
+                  siteMatrices=matrix_probs, 
+                  coding = "variable") 
+
+
+seq.clamp(data)
+
+########
+# MCMC #
+########
+    
+source(path + "scripts/modules/analysis/mcmc.Rev")
+
+source(path + "scripts/modules/tree_summary/tree_summary.Rev")
+
+

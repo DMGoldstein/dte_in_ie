@@ -1,0 +1,47 @@
+
+ 
+latin_romance = clade(
+                    "Latin",
+                    "Nuorese",
+                    "Cagliari",
+                    "Romanian",
+                    "Arumanian",
+                    "Catalan",
+                    "Portuguese", 
+                    "Italian",
+                    "Spanish",
+                    "French", 
+                    "Provencal", 
+                    "Walloon", 
+                    "Ladin", 
+                    "Romansh", 
+                    "Friulian"
+                    )
+
+romance = clade("Nuorese",
+                "Cagliari",
+                "Romanian",
+                "Arumanian",
+                "Catalan",
+                "Portuguese", 
+                "Italian",
+                "Spanish",
+                "French", 
+                "Provencal", 
+                "Walloon", 
+                "Ladin", 
+                "Romansh", 
+                "Friulian")
+
+continental = clade("Romanian",
+                    "Arumanian",
+                    "Catalan",
+                    "Portuguese", 
+                    "Italian",
+                    "Spanish",
+                    "French", 
+                    "Provencal", 
+                    "Walloon", 
+                    "Ladin", 
+                    "Romansh", 
+                    "Friulian")

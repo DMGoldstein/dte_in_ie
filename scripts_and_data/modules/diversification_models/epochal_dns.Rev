@@ -1,0 +1,45 @@
+
+diversification_mean <- ln(total_extant_taxa / 1) / start_time
+
+# specify the mixture model
+n_div_cats = 3
+
+# diversification rates for each category
+for(i in 1:n_div_cats) {
+  diversification_rate_cat[i] ~ dnLognormal(ln(diversification_mean), 0.5)
+  moves.append( mvScale(diversification_rate_cat[i]) )
+}
+
+# turnover rates for each category
+for(i in 1:n_div_cats) {
+  turnover_rate_cat[i] ~ dnBeta(2.0, 2.0)
+  moves.append( mvScale(turnover_rate_cat[i]) )
+}
+
+# diversification mixture weights for each category
+div_mixture_weights ~ dnDirichlet(rep(1, n_div_cats))
+moves.append( mvBetaSimplex(div_mixture_weights, weight = 1.0) )
+moves.append( mvElementSwapSimplex(div_mixture_weights, weight = 1.0) )
+
+# turnover mixture weights for each category
+turnover_mixture_weights ~ dnDirichlet(rep(1, n_div_cats))
+moves.append( mvBetaSimplex(turnover_mixture_weights, weight = 1.0) )
+moves.append( mvElementSwapSimplex(turnover_mixture_weights, weight = 1.0) )
+
+# rates for each epoch
+for(i in 1:(breakpoints.size() + 1)) {
+
+  # diversification rate
+  diversification[i] ~ dnMixture(diversification_rate_cat, div_mixture_weights)
+  moves.append( mvMixtureAllocation(diversification[i], weight = 1.0) )
+
+  # turnover rate
+  turnover[i] ~ dnMixture(turnover_rate_cat, turnover_mixture_weights)
+  moves.append( mvMixtureAllocation(turnover[i], weight = 1.0) )
+
+}
+
+
+denom := abs(1.0 - turnover) 
+birth_rate := diversification / denom
+death_rate := (turnover * diversification) / denom

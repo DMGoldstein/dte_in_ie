@@ -1,0 +1,19 @@
+#sample branch rates from an exponential prior
+branch_rates_mu ~ dnExponential(5.0)
+
+moves.append( mvScale(branch_rates_mu, lambda=0.1,  weight=10.0) )
+moves.append( mvScale(branch_rates_mu, lambda=1.0,  weight=10.0) )
+
+for(i in 1:n_branches){
+
+    branch_rates[i] ~ dnExponential(1/branch_rates_mu)
+    moves.append( mvScale(branch_rates[i], lambda=1.5,  weight=20.0) )
+
+}
+
+# mean of the branch rate
+branch_rate_mean := mean(branch_rates)
+
+# add a move on the branch rate vector
+moves.append( mvVectorScale(branch_rates, lambda=0.1,  weight=4.0) )
+moves.append( mvVectorScale(branch_rates, lambda=1.0,  weight=4.0) )
